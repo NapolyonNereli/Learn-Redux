@@ -1,70 +1,111 @@
-# Getting Started with Create React App
+# Redux, ReactJS CounterApp
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## İlk başta redux'ı projeye dahil ediyoruz.
 
-## Available Scripts
+```
+npm install @reduxjs/toolkit react-redux
 
-In the project directory, you can run:
+veya
 
-### `npm start`
+yarn add @reduxjs/toolkit react-redux
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- src/ dizinin içine bir klasör oluştur. (Ben ismini redux/ koydum)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Dizinin içine `store.js` isminde dosya açtım. Store dosyası sayesinde bütün componentlara ulaşıcaz.
 
-### `npm test`
+#### `src/redux/stroje.js`
+```
+import { configureStore } from "@reduxjs/toolkit";
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+export const store = configureStore({
+    reducer: {
+        
+    }
+}) 
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Store sayfasını hallettikten sonra `index.js` dosyasına Provider'ı ekleyip store propsunu koyalım;
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+// index.js sayfası böyle olacak store bütün projeyi sarmalayacak state işimizi kolaylaştıracak.
 
-### `npm run eject`
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>
+);
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+reportWebVitals();
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## counterSlice.js `src/counter/counterSlice.js`
 
-## Learn More
+```
+import { createSlice } from "@reduxjs/toolkit";
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
+const counterSlice = createSlice({
+    name: "counter",
+    initialState: {
+        value: 0
+    },
+    reducers: {
+        
+    }
+})
+export default counterSlice.reducer;
+```
+- createSlice'ı import ediyoruz.
+- counterSlice değişkeninin içine createSlice  fonksiyonunu atıyoruz.
+- name değeri bu state'i hangi isimle çağıracağımızı belirtir. (state.counter gibi).
+- initialState ise state'in default olarak değerini belirtir.
+- reducers ise actiondır ve initialState'in değerini değiştirir reducer ile action eklersin ve değerleri değiştirir manipüle edersin.
+- Son olarak reducer'ı dışarı aktarıyoruz. Export ediyoruz.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+# CounterJS dosyasına geçiyoruz ve state'i ekranda gösteriyoruz.
+```
+import React from 'react'
+import { useSelector } from 'react-redux'
 
-### Analyzing the Bundle Size
+function Counter() {
+  const counterValue = useSelector((state) => state.counter.value);
+  return (
+    <div>
+      <h1>{counterValue}</h1>
+    </div>
+  )
+}
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+export default Counter
+```
+- öncelikle useSelector hook'unu import ediyoruz bu hook sayesinde store'da ki state'e ulaşıp counter değerini counterValue değişkenine atıyoruz.
+- name'i counter olanın değerini default olarak 0 verdiğimiz için ekranda 0 yazısını görücez.
+# SCREEN SHOT EKLENEBİLİR.
 
-### Making a Progressive Web App
+# Dosyalama
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- src
+  - components
+    - Counter.js
+  - counter
+    - counterSlice.js
+  - redux
+    - store.js
+  - App.js
+  - index.js
