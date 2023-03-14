@@ -192,14 +192,3 @@ export const store = configureStore({
 }) 
 ```
 
-# Dosyalama
-
-- src
-  - components
-    - Counter.js
-  - counter
-    - counterSlice.js
-  - redux
-    - store.js
-  - App.js
-  - index.js
